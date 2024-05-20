@@ -4,6 +4,7 @@ import mysql.connector
 from geopy.distance import geodesic
 from flask import Flask, render_template
 from datetime import timedelta
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = 'yedhukku'
@@ -43,8 +44,8 @@ def register():
     # Connect to the database
     conn = connect_to_database()
     cursor = conn.cursor()
-    insert_query = "INSERT INTO users (name, email, password, salt, phone, gender, age, city) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
-    cursor.execute(insert_query, (name, email, password, salt, phone, gender, age, city))
+    insert_query = "INSERT INTO users (name, email, password, salt, phone, gender, age, city, role) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    cursor.execute(insert_query, (name, email, password, salt, phone, gender, age, city, 'USER'))
     conn.commit()
     cursor.close()
     conn.close()
@@ -91,6 +92,9 @@ def check():
     cursor = conn.cursor()
     cursor.execute("SELECT password FROM users WHERE email = %s;", (user_email,))
     hps = cursor.fetchone()    
+    cursor.execute("SELECT role FROM users WHERE email = %s;", (user_email,))
+    role = cursor.fetchone()
+    role = role[0]
     conn.close()
     h = (hpe, hps)
 
@@ -109,13 +113,23 @@ def check():
         session['email'] = email[0]
         session['phone'] = phone[0]
         session['location'] = city[0]
+        conn.close()
 
         name=session.get('name')
         email=session.get('email')
         phone=session.get('phone')
         location=session.get('location')
         detail = (name, email, phone, location)
-        return render_template('HOME.html', details = detail)
+        if (role == 'USER'):
+            return render_template('HOME.html', details = detail)
+        else:
+            conn = connect_to_database()
+            cursor = conn.cursor()
+            cursor.execute("SELECT MOVIES.MOVIE_ID, MOVIES.MOVIE_NAME, MOVIES.RDATE, rfm(MOVIES.MOVIE_ID) AS total_revenue FROM MOVIES;")
+            movie_detail = cursor.fetchall()
+            cursor.execute("SELECT THEATER_ID, THEATER_NAME, LOCATION FROM THEATERS;")
+            theater_detail = cursor.fetchall()
+            return render_template('ADMIN.html', details = detail, movie_details = movie_detail, theater_details = theater_detail)
     else:
         return render_template("LOGIN.html", error = "Invalid Email or Password!")
    
@@ -444,7 +458,18 @@ def mt_movies(theater_id):
     m = session.get('selected_movie')
     detail = (name, email, phone, location, m)
 
-    return render_template('MOVIES.html', today_movies=today_movies, tomorrow_movies=tomorrow_movies, details=detail)
+    def convert_date(date_str):
+        date_obj = datetime.strptime(date_str, '%Y-%m-%d')
+        day = date_obj.day
+        suffix = 'th' if 11 <= day <= 13 else {1: 'st', 2: 'nd', 3: 'rd'}.get(day % 10, 'th')
+        day_name = date_obj.strftime('%a')
+        formatted_date = date_obj.strftime(f"%d{suffix} %B")
+        return (day_name, formatted_date)
+
+    fdt1 = convert_date(today)
+    fdt2 = convert_date(tomorrow)
+
+    return render_template('MOVIES.html', today = fdt1, tomorrow = fdt2, today_movies=today_movies, tomorrow_movies=tomorrow_movies, details=detail)
 
 theater_id_variable = 0
 @app.route('/tm_movies/<int:theater_id>/<int:movie_id>')
@@ -492,19 +517,104 @@ def tm_movies(theater_id, movie_id):
     m = movie_id
     detail = (name, email, phone, location, m)
 
-    return render_template('MOVIES.html', today_movies=today_movies, tomorrow_movies=tomorrow_movies, details=detail)
+    def convert_date(date_str):
+        date_obj = datetime.strptime(date_str, '%Y-%m-%d')
+        day = date_obj.day
+        suffix = 'th' if 11 <= day <= 13 else {1: 'st', 2: 'nd', 3: 'rd'}.get(day % 10, 'th')
+        day_name = date_obj.strftime('%a')
+        formatted_date = date_obj.strftime(f"%d{suffix} %B")
+        return (day_name, formatted_date)
+
+    fdt1 = convert_date(today)
+    fdt2 = convert_date(tomorrow)
+
+    return render_template('MOVIES.html', today = fdt1, tomorrow = fdt2, today_movies=today_movies, tomorrow_movies=tomorrow_movies, details=detail)
 
 
 
-@app.route('/bookings/<int:movie_id>/<int:screen_id>/<string:time>')
-def booking(movie_id, screen_id, time):
+@app.route('/bookings/<int:movie_id>/<int:screen_id>/<string:time>/<string:day>')
+def booking(movie_id, screen_id, time, day):
     # You can perform additional logic here if needed
     ti = theater_id_variable
     conn = connect_to_database()
     cursor = conn.cursor()
+    cursor.execute("""SELECT MOVIE_ID, MOVIE_NAME, GENRE FROM MOVIES WHERE MOVIE_ID = %s;""", (movie_id,))
+    movie = cursor.fetchall()
+    cursor.execute("""SELECT THEATER_ID, THEATER_NAME, LOCATION FROM THEATERS WHERE THEATER_ID = %s;""", (ti,))
+    theater = cursor.fetchall()
     cursor.execute("""SELECT ELITE_SEATS, PREMIUM_SEATS FROM SCREENS WHERE THEATER_ID = %s AND SCREEN_ID = %s;""", (ti, screen_id,))
-    seats = cursor.fetchall()
-    return render_template('BOOKINGS.html', theater_id=ti, movie_id=movie_id, screen_id=screen_id, time=time, seats=seats)
+    seat = cursor.fetchall()
+    name = session.get('name')
+    email = session.get('email')
+    phone = session.get('phone') 
+    location = session.get('location')
+    session['mv_s'] = movie_id
+    session['th_s'] = ti
+    session['sc_s'] = screen_id
+    session['ti_s'] = time
+    session['da_s'] = day
+    detail = (name, email, phone, location)
+    return render_template('BOOKINGS.html', movies = movie, theaters = theater, screen  = screen_id, times =time, days = day, seats=seat,  details=detail)
+
+@app.route('/proceed', methods=['POST'])
+def proceed():
+    data = request.get_json()
+    selected_seats = data.get('selectedSeats', [])
+    selected_seats_string = ', '.join(map(str, selected_seats))
+    session['se_s'] = selected_seats
+    return jsonify({'selectedSeats': selected_seats_string})
+
+
+@app.route('/tickets')
+def tickets():
+    name = session.get('name')
+    email = session.get('email')
+    phone = session.get('phone')
+    location = session.get('location')
+    movie = session.get('mv_s')
+    theater = session.get('th_s')
+    screen = session.get('sc_s')
+    time = session.get('ti_s')
+    day = session.get('da_s')
+    date_obj = datetime.strptime(day[9:-2], "%dth %B")
+    new_date_obj = date_obj - timedelta(days=0)
+    formatted_date = new_date_obj.strftime("2024-%m-%d")
+    seats = session.get('se_s')
+    all_detail = (name, email, phone, location, movie, theater, screen, time, formatted_date, seats)
+    return render_template('TICKETS.html', all_details = all_detail)
+
+@app.route('/create_movie')
+def create_movie():
+    return render_template('EDIT_MOVIES_2.html')
+
+@app.route('/insert_movie', methods=['POST'])
+def insert_movie():
+    movie_id = request.form['movie_id']
+    movie_name = request.form['movie_name']
+    genre = request.form['genre']
+    rating = request.form['rating']
+    description = request.form['description']
+    url = request.form['url']
+    run_time = request.form['run_time']
+    rdate = request.form['rdate']
+    conn = connect_to_database()
+    cursor = conn.cursor()
+    insert_query = "INSERT INTO MOVIES (movie_id, movie_name, genre, rating, description, url, run_time, rdate) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+    cursor.execute(insert_query, (movie_id, movie_name, genre, rating, description, url, run_time, rdate))
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    name=session.get('name')
+    email=session.get('email')
+    phone=session.get('phone')
+    location=session.get('location')
+    detail = (name, email, phone, location)
+    conn = connect_to_database()
+    cursor = conn.cursor()
+    cursor.execute("SELECT MOVIE_ID, MOVIE_NAME, GENRE, RATING, DESCRIPTION, URL, RUN_TIME, RDATE FROM MOVIES;")
+    movie_detail = cursor.fetchall()
+    return render_template('EDIT_MOVIES_1.html', details = detail, movie_details = movie_detail)
 
 if __name__ == '__main__':
     app.run(debug=True)

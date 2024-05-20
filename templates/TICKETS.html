@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TICKETS</title>
+</head>
+<body>
+    <h1>Selected Seats</h1>
+    <p>{{ all_details[0] }}</p>
+    <p>{{ all_details[1] }}</p>
+    <p>{{ all_details[2] }}</p>
+    <p>{{ all_details[3] }}</p>
+    <p>{{ all_details[4] }}</p>
+    <p>{{ all_details[5] }}</p>
+    <p>{{ all_details[6] }}</p>
+    <p>{{ all_details[7] }}</p>
+    <p>{{ all_details[8] }}</p>
+    {% for i in all_details[9] %}
+        <p>{{ i }}</p>
+    {% endfor %}
+</body>
+</html>

@@ -326,7 +326,7 @@
                             <p class="mmid" style="visibility: hidden;">{{ movie[0] }}</p>
                             <div class="screens-times">
                                 {% for i in range(movie[7].split(',')|length) %}
-                                    <a href="/bookings/{{ movie[0] }}/{{ movie[7].split(',')[i] }}/{{ movie[8].split(',')[i] }}">
+                                    <a href="/bookings/{{ movie[0] }}/{{ movie[7].split(',')[i] }}/{{ movie[8].split(',')[i] }}/{{ today }}">
                                         <div class="screen-box">
                                             <h1>Screen: {{ movie[7].split(',')[i] }}</h1>
                                             <h2>{{ movie[8].split(',')[i] }}</h2>
@@ -352,7 +352,7 @@
                             <p class="mmid" style="visibility: hidden;">{{ movie[0] }}</p>
                             <div class="screens-times">
                                 {% for i in range(movie[7].split(',')|length) %}
-                                    <a href="/bookings/{{ movie[0] }}/{{ movie[7].split(',')[i] }}/{{ movie[8].split(',')[i] }}">
+                                    <a href="/bookings/{{ movie[0] }}/{{ movie[7].split(',')[i] }}/{{ movie[8].split(',')[i] }}/{{ tomorrow }}">
                                         <div class="screen-box">
                                             <h1>Screen: {{ movie[7].split(',')[i] }}</h1>
                                             <h2>{{ movie[8].split(',')[i] }}</h2>

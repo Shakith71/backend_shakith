@@ -385,7 +385,7 @@
                 console.log('Salt fetched from Flask:', data);
                 var password = document.getElementById('passwordl').value;
                 var salt = data;
-                var hashedPassword = CryptoJS.SHA256(password + data).toString();
+                var hashedPassword = CryptoJS.SHA1(password + data).toString();
                 console.log('Password hashed based on Salt:', hashedPassword);
                 document.getElementById('passwordl').value = hashedPassword;
             })
@@ -399,7 +399,7 @@
         function hashPassword(passwordFieldId) {
             var password = document.getElementById(passwordFieldId).value;
             var salt = CryptoJS.lib.WordArray.random(8);
-            var hashedPassword = CryptoJS.SHA256(password + salt);
+            var hashedPassword = CryptoJS.SHA1(password + salt);
             document.getElementById(passwordFieldId).value = hashedPassword.toString();
             document.getElementById("salt").value = salt;
         }
