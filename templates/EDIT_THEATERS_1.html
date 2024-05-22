@@ -49,37 +49,27 @@
 <body>
     
 
-    <div class="heading container"><h1>Movie</h1></div>
+    <div class="heading container"><h1>Theater</h1></div>
     <div class="container">
     <table class="table table-hover table-stripped ">
         <table class="table">
             <thead>
               <tr>
-                <th scope="col">MOVIE_ID</th>
-                <th scope="col">MOVIE_NAME</th>
-                <th scope="col">GENRE</th>
-                <th scope="col">RATING</th>
-                <th scope="col">DESCRIPTION</th>
-                <th scope="col">URL</th>
-                <th scope="col">RUN_TIME</th>
-                <th scope="col">RDATE</th>
+                <th scope="col">THEATER_ID</th>
+                <th scope="col">THEATER_NAME</th>
+                <th scope="col">LOCATION</th>
                 <th scope="col">UPDATE</th>
                 <th scope="col">DELETE</th>
               </tr>
             </thead>
             <tbody>
-              {% for movie in movie_details %}
+              {% for theater in theater_details %}
               <tr>
-                <th scope="row">{{ movie[0] }}</th>
-                <td>{{ movie[1] }}</td>
-                <td>{{ movie[2] }}</td>
-                <td>{{ movie[3] }}</td>
-                <td>{{ movie[4] }}</td>
-                <td>{{ movie[5] }}</td>
-                <td>{{ movie[6] }}</td>
-                <td>{{ movie[7] }}</td>
-                <td><a href = "/update_movie/{{ movie[0] }}"><button type="button" class="btn btn-primary" style="background-color:#023020;">UPDATE</button></a></td>
-                <td><a href = "/delete_movie/{{ movie[0] }}"><button type="button" class="btn btn-danger">DELETE</button></a></td>
+                <th scope="row">{{ theater[0] }}</th>
+                <td>{{ theater[1] }}</td>
+                <td>{{ theater[2] }}</td>
+                <td><a href = "/update_theater/{{ theater[0] }}"><button type="button" class="btn btn-primary" style="background-color:#023020;">UPDATE</button></a></td>
+                <td><a href = "/delete_theater/{{ theater[0] }}"><button type="button" class="btn btn-danger">DELETE</button></a></td>
               </tr>
               {% endfor %}
             </tbody>
@@ -88,7 +78,7 @@
       </div>
 
       <div class="bt">
-        <div class=" container-md mt-5"><a href = '/insert_movie'><button type="button" class="create b btn  w-75">CREATE</button></a></div>
+        <div class=" container-md mt-5"><a href = '/insert_theater'><button type="button" class="create b btn  w-75">CREATE</button></a></div>
         <div class=" container-md mt-2"><a href = '/back_from'><button type="button" class="back b btn w-75">BACK</button></a></div>
       </div>
 

@@ -318,10 +318,15 @@
     .mb{
         margin-top: 5%;
     }    
-        
+        .ton{
+            border: none; background-color: #f6f5f7; padding: 0; margin:0px;
+        }
     </style>
 </head>
 <body>
+    <script id="bookings-seat-data" type="application/json">
+        {{ bookings_seat | tojson }}
+    </script>
 
 
     <header class = "hb">
@@ -344,7 +349,7 @@
             </div>
         </div>
     </header>
-    
+   
     <center>
     <div class="bodyContainer">
         
@@ -357,20 +362,21 @@
             <div style="margin:0px 200px;" class="letter" id="letter{{ loop.index }}"></div>
 
             <div class="containerA1">
-                <div class="king" onclick="ding(event)" id="pseat{{ 1 + loop.index * 10 - 10}}">1</div>
-                <div class="king" onclick="ding(event)" id="pseat{{ 2 + loop.index * 10 - 10}}">2</div>
-                <div class="king" onclick="ding(event)" id="pseat{{ 3 + loop.index * 10 - 10}}">3</div>
-                <div class="king" onclick="ding(event)" id="pseat{{ 4 + loop.index * 10 - 10}}">4</div>
+
+                <button class="ton"><div class="king" onclick="ding(event)" id="pseat{{ 1 + loop.index * 10 - 10}}">1</div></button>
+                <button class="ton"><div class="king" onclick="ding(event)" id="pseat{{ 2 + loop.index * 10 - 10}}">2</div></button>
+                <button class="ton"><div class="king" onclick="ding(event)" id="pseat{{ 3 + loop.index * 10 - 10}}">3</div></button>
+                <button class="ton"><div class="king" onclick="ding(event)" id="pseat{{ 4 + loop.index * 10 - 10}}">4</div></button>
             </div>
             <div class="containerA2" >
-                <div class="king" onclick="ding(event)" id="pseat{{ 5 + loop.index * 10 - 10}}">5</div>
-                <div class="king" onclick="ding(event)" id="pseat{{ 6 + loop.index * 10 - 10}}">6</div>
-                <div class="king" onclick="ding(event)" id="pseat{{ 7 + loop.index * 10 - 10}}">7</div>
-                <div class="king" onclick="ding(event)" id="pseat{{ 8 + loop.index * 10 - 10}}">8</div>
+                <button class="ton"><div class="king" onclick="ding(event)" id="pseat{{ 5 + loop.index * 10 - 10}}">5</div></button>
+                <button class="ton"><div class="king" onclick="ding(event)" id="pseat{{ 6 + loop.index * 10 - 10}}">6</div></button>
+                <button class="ton"><div class="king" onclick="ding(event)" id="pseat{{ 7 + loop.index * 10 - 10}}">7</div></button>
+                <button class="ton"><div class="king" onclick="ding(event)" id="pseat{{ 8 + loop.index * 10 - 10}}">8</div></button>
             </div>
             <div class="containerA3">
-                <div class="king" onclick="ding(event)" id="pseat{{ 9 + loop.index * 10 - 10}}">9</div>
-                <div class="king" onclick="ding(event)" id="pseat{{ 10 + loop.index * 10 - 10}}">10</div>
+                <button class="ton"><div class="king" onclick="ding(event)" id="pseat{{ 9 + loop.index * 10 - 10}}">9</div></button>
+                <button class="ton"><div class="king" onclick="ding(event)" id="pseat{{ 10 + loop.index * 10 - 10}}">10</div></button>
             </div>
         </div>
         {% endfor %}
@@ -383,20 +389,21 @@
             
             <div style="margin:0px 200px;" class="letter" id="letter{{ loop.index }}"></div>
             <div class="containerA1"> 
-                <div class="king" onclick="ding(event)" id="eseat{{ 1 + loop.index * 10 - 10}}">1</div>
-                <div class="king" onclick="ding(event)" id="eseat{{ 2 + loop.index * 10 - 10}}">2</div>
-                <div class="king" onclick="ding(event)" id="eseat{{ 3 + loop.index * 10 - 10}}">3</div>
-                <div class="king" onclick="ding(event)" id="eseat{{ 4 + loop.index * 10 - 10}}">4</div>
+                <button class="ton"><div class="king" onclick="ding(event)" id="eseat{{ 1 + loop.index * 10 - 10}}">1</div></button>
+                <button class="ton"><div class="king" onclick="ding(event)" id="eseat{{ 2 + loop.index * 10 - 10}}">2</div></button>
+                <button class="ton"><div class="king" onclick="ding(event)" id="eseat{{ 3 + loop.index * 10 - 10}}">3</div></button>
+                <button class="ton"><div class="king" onclick="ding(event)" id="eseat{{ 4 + loop.index * 10 - 10}}">4</div></button>
             </div>
             <div class="containerA2" >
-                <div class="king" onclick="ding(event)" id="eseat{{ 5 + loop.index * 10 - 10}}">5</div>
-                <div class="king" onclick="ding(event)" id="eseat{{ 6 + loop.index * 10 - 10}}">6</div>
-                <div class="king" onclick="ding(event)" id="eseat{{ 7 + loop.index * 10 - 10}}">7</div>
-                <div class="king" onclick="ding(event)" id="eseat{{ 8 + loop.index * 10 - 10}}">8</div>
+                <button class="ton"><div class="king" onclick="ding(event)" id="eseat{{ 5 + loop.index * 10 - 10}}">5</div></button>
+                <button class="ton"><div class="king" onclick="ding(event)" id="eseat{{ 6 + loop.index * 10 - 10}}">6</div></button>
+                <button class="ton"><div class="king" onclick="ding(event)" id="eseat{{ 7 + loop.index * 10 - 10}}">7</div></button>
+                <button class="ton"><div class="king" onclick="ding(event)" id="eseat{{ 8 + loop.index * 10 - 10}}">8</div></button>
             </div>
             <div class="containerA3">
-                <div class="king" onclick="ding(event)" id="eseat{{ 9 + loop.index * 10 - 10}}">9</div>
-                <div class="king" onclick="ding(event)" id="eseat{{ 10 + loop.index * 10 - 10}}">10</div>
+                
+                <button class="ton"><div class="king" onclick="ding(event)" id="eseat{{ 9 + loop.index * 10 - 10}}">9</div></button>
+                <button class="ton"><div class="king" onclick="ding(event)" id="eseat{{ 10 + loop.index * 10 - 10}}">10</div></button>
 
             </div>
         </div>
@@ -436,10 +443,10 @@
         <hr>
         <div class="animal">
         <div class="mb">
-            <div style="color:rgb(131, 128, 128); font-size: 15px;">Total</div>
+            <div style="color:rgb(68, 68, 68); font-size: 15px;">Total</div>
             <div id="animalInside" style="font-size: 25px;"></div>
         </div>
-        <button class="a mb" id = 'proceedButton'>Continue</button>
+        <button class="a mb" id = 'proceedButton' >Continue</button>
         </div>
     </footer>
 
@@ -450,14 +457,19 @@
             letters.forEach(function(letter, index) {
                 letter.textContent = String.fromCharCode(startCharCode + index);
             });
+
         };
 
 
         var selectedSeats = [];
-
+        var selectedLetter = [];
         var count = 0;
         function ding(event) {
             var clickedElement = event.target;
+            var parentButton = clickedElement.parentElement;
+            if(parentButton.disabled){
+                return;
+            }
             const seatId = event.target.id;
             var currentColor = window.getComputedStyle(clickedElement).backgroundColor;
             
@@ -466,6 +478,7 @@
                 clickedElement.style.color = 'white';
                 count += 1;
                 selectedSeats.push(seatId);
+                
             } else {
                 clickedElement.style.backgroundColor = 'transparent';
                 clickedElement.style.color = '#075E54';
@@ -490,8 +503,6 @@
             }
             console.log(selectedSeats)
         }
-
-
         
         function selectSeat() {
             // Fetch request to the proceed route with selected seats data
@@ -505,7 +516,7 @@
             .then(response => response.json())
             .then(data => {
                 console.log(data); // Handle the response from the server
-                window.location.href = '/tickets';
+                window.location.href = '/bookings';
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -513,6 +524,43 @@
         }
 
         document.getElementById('proceedButton').addEventListener('click', selectSeat);
+ 
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to disable booked seats and change their background color
+            function disableBookedSeats(bookingsSeat) {
+                // Get all div elements with class "king"
+                var divElements = document.querySelectorAll('.king');
+
+                // Iterate over each div element
+                divElements.forEach(function(div) {
+                    // Get the seat ID from the div's id attribute
+                    const seatId = div.id;
+
+                    // Check if the seat ID is in the bookings_seat list
+                    const isBooked = bookingsSeat.includes(seatId);
+
+                    if (isBooked) {
+                        // If the seat is booked, disable the parent button and change its background color
+                        var parentButton = div.parentElement;
+                        parentButton.disabled = true;
+                        div.style.backgroundColor = 'grey';
+                         // Change the color to indicate it's booked
+                         div.style.color = 'white';
+                         div.style.border = '1px solid grey';
+                         div.style.padding = '11px';
+                    }
+                });
+            }
+
+            // Retrieve bookingsSeat data from the script tag
+            const bookingsSeat = JSON.parse(document.getElementById('bookings-seat-data').textContent);
+
+            // Call the function to disable booked seats when the page loads
+            disableBookedSeats(bookingsSeat);
+        });
+        
        
    </script>
 </body>
